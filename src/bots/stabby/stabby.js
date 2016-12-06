@@ -7,9 +7,37 @@ import Damage from 'leftovers-again/game/damage';
 
 import { MOVE, SWITCH } from 'leftovers-again/decisions';
 
+var spawn = require('child_process').spawn;
+var fs = require('fs');
+var move = "Nothing yet";
+
 export default class Stabby {
 
+  constructor(){
+    //this.py = spawn('python', ['../pokemonMDP/MDPDecider.py']);
+  }
+
   decide(state) {
+    this.py = spawn('python', ['../pokemonMDP/MDPDecider.py']);
+    this.py.stdout.on('data', function(data){
+      move = data.toString();
+    });
+    this.py.stdout.on('end', function(){
+      process.stdout.write("Our stream closed!\n");
+    });
+    this.py.stdin.write(JSON.stringify(state) + '\n');
+    this.py.stdin.end();
+    this.py.stdin.read();
+    process.stdout.write("Deciding...\n");
+    if(move == "Nothing yet"){
+      process.stdout.write("Didn't get anything yet\n");
+    }else{
+      process.stdout.write("Hey it worked!\n");
+      process.stdout.write(move);
+    }
+    
+
+    
     if (state.forceSwitch) {
       // our pokemon died :(
       // choose a random one

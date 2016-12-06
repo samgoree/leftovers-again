@@ -278,6 +278,7 @@ class Battle {
     state.prevStates = this.prevStates;
 
     try {
+      this.myBot().decide(state);
       const choice = this.myBot().decide(state);
 
       if (choice instanceof Promise) {

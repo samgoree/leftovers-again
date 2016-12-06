@@ -1,6 +1,9 @@
 /**
  * AI class. Extend this when creating your bot.
  */
+
+
+
 export default class AI {
   constructor() {} // eslint-disable-line
 
@@ -14,6 +17,10 @@ export default class AI {
    */
   team(opponent) { // eslint-disable-line
     return this.meta.team || '';
+  }
+
+  report(state){
+    
   }
 
   /**
