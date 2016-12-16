@@ -1,0 +1,9 @@
+{
+  "name": "mdp",
+  "version": "0.1.0",
+  "description": "Our addition, uses MDP from files and python",
+  "main": "mdp.js",
+  "format": "anythinggoes",
+  "accepts": "ALL",
+  "nickname": "therealmdp"
+}

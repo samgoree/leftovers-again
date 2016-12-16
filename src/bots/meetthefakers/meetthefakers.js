@@ -6,12 +6,13 @@ import AI from 'leftovers-again/ai';
 import { MOVE, SWITCH } from 'leftovers-again/decisions';
 import Typechart from 'leftovers-again/game/typechart';
 import Damage from 'leftovers-again/game/damage';
+import util from 'leftovers-again/pokeutil';
 
 
 class MeetTheFakers extends AI {
   team() {
     return `
-Medicham @ Medichamite
+Medicham @ Leftovers
 Ability: Pure Power
 EVs: 252 Atk / 4 Def / 252 Spe
 Jolly Nature
@@ -21,40 +22,45 @@ Jolly Nature
 - Ice Punch
 
 Hitmonlee @ Salac Berry
-Ability: Unburden
+Ability: limber
 EVs: 252 Atk / 4 Def / 252 Spe
+Jolly Nature
 - Fake Out
 - Endure
 - Reversal
 - Stone Edge
 
 Jynx @ Focus Sash
-Ability: Dry Skin
+Ability: Oblivious
 EVs: 252 SpA / 4 SpD / 252 Spe
+Jolly Nature
 - Fake Out
 - Lovely Kiss
 - Ice Beam
 - Fake Tears
 
 Ludicolo @ Leftovers
-Ability: Swift Swim
+Ability: Rain Dish
 EVs: 252 SpA / 4 SpD / 252 Spe
+Jolly Nature
 - Fake Out
 - Toxic
 - Surf
 - Rain Dance
 
 Weavile @ Choice Band
-Ability: Pressure
+Ability: Pickpocket
 EVs: 252 Atk / 4 Def / 252 Spe
+Jolly Nature
 - Fake Out
 - Night Slash
 - Ice Shard
 - Brick Break
 
 Infernape @ Life Orb
-Ability: Blaze
+Ability: Iron Fist
 EVs: 136 Atk / 120 SpA / 252 Spe
+Jolly Nature
 - Fake Out
 - Flare Blitz
 - Stone Edge
@@ -189,7 +195,7 @@ EVs: 136 Atk / 120 SpA / 252 Spe
     //   return new MOVE('raindance');
     // }
 
-    const waterEffectiveness = Typechart.compare('Water', state.opponent.active.types);
+    const waterEffectiveness = 1;
 
     const shouldToxic = state.opponent.active.statuses.indexOf('tox') === -1;
     const shouldSurf = isRaining && waterEffectiveness >= 1;
@@ -204,9 +210,9 @@ EVs: 136 Atk / 120 SpA / 252 Spe
           if (b.species === 'Infernape') return -1;
           return 0;
         });
-      if (x.length > 0) {
-        return new SWITCH(x[0]);
-      }
+      //if (x.length > 0) {
+        //return new SWITCH(x[0]);
+      //}
       return new MOVE('surf');
     } else if (shouldSurf) {
       return new MOVE('surf');

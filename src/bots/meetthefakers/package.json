@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Uses fakeout a lot.",
   "main": "meetthefakers.js",
-  "format": "ou",
+  "format": "anythinggoes",
   "accepts": "ALL",
   "nickname": "la-meetthefakers"
 }

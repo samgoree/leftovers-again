@@ -7,6 +7,8 @@ import report from './report';
 import listener from './listener';
 import Reporter from './reporters/matchstatus';
 import util from './pokeutil';
+var currentdate = new Date(); 
+var datetime =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 
 const timer = new Timer();
 // that's right...you're gonna forfeit if you don't decide in this amount of time
@@ -156,6 +158,7 @@ class Battle {
    */
   handleWin(nick) {
     timer.ping(); // don't worry about timeout anymore
+    this.myBot().py.stdin.end(); // end the reporting stream
     const winner = util.toId(nick);
     Log.log(`${winner} won. ${winner === this.store.myNick ? '(that\'s you!)' : ''}`);
     report.win(winner, this.store, this.bid);
@@ -271,6 +274,7 @@ class Battle {
     Log.debug(JSON.stringify(state));
 
     Reporter.report(state);
+/*/*/
 
     Log.toFile(`lastknownstate-${this.bid}.log`, JSON.stringify(state) + '\n');
 
@@ -278,9 +282,13 @@ class Battle {
     state.prevStates = this.prevStates;
 
     try {
-      this.myBot().decide(state);
       const choice = this.myBot().decide(state);
-
+      var moveIdx = choice;
+      if (choice instanceof MOVE || choice.type === 'move') {
+        moveIdx = this.lookupMoveIdx(state.self.active.moves, choice.id);
+      }
+      
+      Log.toFile(datetime + "testout", JSON.stringify(state) + "###" + JSON.stringify(moveIdx));
       if (choice instanceof Promise) {
         // wait for promises to resolve
         choice.then((resolved) => {
@@ -358,6 +366,49 @@ class Battle {
       }
     };
   }
+
+  /*abbreviateStateForMDP(state){
+    state.opponent.reserve.forEach(mon => process.stdout.write(JSON.stringify(mon)));
+    /*var availableMons = state.opponent.reserve.forEach((mon)=> {
+      if(mon.dead==false){
+        mon;
+      }
+    });
+    var oppAvailableMons = state.self.reserve.forEach((mon) => {
+      if(mon.dead==false){
+        mon;
+      }
+    });
+    process.stdout.write(availableMons);
+    var myReserves = availableMons.forEach((mon) => ({
+            hppct: mon.hppct,
+            pokemon: mon.idx,
+            moves: mon.moves
+          }));
+    var oppReserves = oppAvailableMons.forEach((mon) => ({
+              hppct: mon.hppct,
+              pokemon: mon.idx,
+              moves: mon.moves,
+          }));
+    return {
+      self:{
+        active: {
+          hppct: state.self.active.hppct,
+          pokemon: state.self.active.index,
+          moves: state.self.active.moves
+        },
+        reserves: myReserves
+      },
+      opponent:{
+          active:{
+            hppct: state.opponent.active.hppct,
+            pokemon: state.opponent.active.index,
+            moves: state.opponent.active.moves,
+          },
+          reserves: oppReserves
+      }
+    };
+  }*/
 
   /**
    * Formats the message into something we can send to the server.
